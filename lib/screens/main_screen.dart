@@ -8,7 +8,6 @@ import '../providers/weather_provider.dart';
 import '../widgets/audio_visualizer.dart';
 import '../widgets/weather_widget.dart';
 import '../widgets/horoscope_widget.dart';
-import '../navigation/app_router.dart'; // Импортируем наш роутер
 
 class MainScreen extends StatefulWidget {
   final VoidCallback onThemeToggle;
@@ -141,7 +140,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 
                 // Адаптируем размеры в зависимости от типа устройства
                 final double contentPadding = isTablet ? 32.0 : 20.0;
-                final double elementSpacing = isTablet ? 0.03 : 0.02;
+                final double elementSpacing = isTablet ? 0.02 : 0.01;
                 
                 return SingleChildScrollView(
                   physics: scrollPhysics,
@@ -157,7 +156,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.calendar_today, size: 16, color: Colors.blueGrey),
+                            IconButton(
+                              onPressed: widget.onThemeToggle,
+                              icon: Icon(
+                                isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                                color: isDark ? Colors.amberAccent : Colors.blueGrey,
+                                size: 28,
+                              ),
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               currentDate,
@@ -168,9 +174,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
+                            const SizedBox(width: 8),
+                            _buildSleepTimerBadge(isDark),
                           ],
                         ),
-                        SizedBox(height: maxHeight * elementSpacing),
+                        SizedBox(height: maxHeight * 0.005), // Уменьшенный отступ перед погодой
                         _buildWeatherSection(isDark, textColor, secondaryTextColor, maxHeight, maxWidth),
                         SizedBox(height: maxHeight * elementSpacing),
                         AudioVisualizer(isDark: isDark, screenHeight: maxHeight),
@@ -231,35 +239,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: widget.onThemeToggle,
-            icon: Icon(
-              isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
-              color: isDark ? Colors.amberAccent : Colors.blueGrey,
-              size: 28,
-            ),
-          ),
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRouter.settings);
-                },
-                icon: Icon(
-                  Icons.settings,
-                  color: isDark ? Colors.white70 : Colors.blueGrey,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 10),
-              _buildSleepTimerBadge(isDark),
-            ],
-          ),
-        ],
-      ),
+      child: Container(), // Пустой контейнер вместо иконок
     );
   }
 

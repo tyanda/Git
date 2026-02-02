@@ -140,16 +140,14 @@ class HoroscopeWidget extends StatelessWidget {
                 }
 
                 return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 20,
-                        offset: const Offset(0, -5),
-                      ),
-                    ],
+                    color: isDark ? const Color(0xFF1E293B).withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.8),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: isDark ? const Color(0xFF1E293B).withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Column(
                     children: [
