@@ -390,17 +390,19 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   }
 
   void _setSleepTimer(int minutes) {
+    debugPrint("Setting sleep timer for $minutes minutes");
     _sleepTimer?.cancel();
     setState(() => _remainingSeconds = minutes * 60);
     _sleepTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (!mounted) { 
-        timer.cancel(); 
-        return; 
+      if (!mounted) {
+        timer.cancel();
+        return;
       }
       if (_remainingSeconds > 0) {
         setState(() => _remainingSeconds--);
       } else {
         // Stop the audio when timer ends
+        debugPrint("Sleep timer ended, stopping audio");
         context.read<AudioProvider>().togglePlay();
         timer.cancel();
       }

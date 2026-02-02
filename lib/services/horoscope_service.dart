@@ -19,8 +19,11 @@ class HoroscopeService {
   };
 
   Future<String> fetchHoroscope(String zodiacId) async {
+    debugPrint("Fetching horoscope for zodiac sign: $zodiacId");
     try {
       final url = Uri.parse('https://horo.mail.ru/prediction/$zodiacId/today/');
+      debugPrint("Horoscope URL: $url");
+      
       final response = await http.get(
         url,
         headers: {
@@ -30,14 +33,18 @@ class HoroscopeService {
         },
       ).timeout(const Duration(seconds: 10));
 
+      debugPrint("Horoscope response status: ${response.statusCode}");
       if (response.statusCode == 200) {
+        debugPrint("Horoscope response body length: ${response.body.length}");
         var document = parser.parse(response.body);
         var mainElement = document.querySelector('main[data-qa="ArticleLayout"]');
         if (mainElement != null) {
           mainElement.querySelectorAll('a').forEach((element) => element.remove());
           String cleanText = mainElement.text.trim();
+          debugPrint("Horoscope text length: ${cleanText.length}");
           return cleanText.isNotEmpty ? cleanText : "Не удалось получить прогноз.";
         } else {
+          debugPrint("Horoscope: Could not find main element with selector 'main[data-qa=\"ArticleLayout\"]'");
           throw Exception("Не удалось найти текст");
         }
       } else {

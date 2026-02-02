@@ -32,22 +32,34 @@ class AudioProvider with ChangeNotifier {
   }
 
   Future<void> togglePlay() async {
+    debugPrint("togglePlay called. Current state: isPlaying=$_isPlaying");
     if (_isPlaying) {
+      debugPrint("Stopping audio playback");
       await _player.stop();
+      debugPrint("Audio playback stopped");
     } else {
+      debugPrint("Starting audio playback");
       _isLoading = true;
       notifyListeners();
       
-      await _player.setAudioSource(
-        AudioSource.uri(Uri.parse(_streamUrl)),
-        preload: false,
-      );
-      
-      await _player.play();
+      try {
+        await _player.setAudioSource(
+          AudioSource.uri(Uri.parse(_streamUrl)),
+          preload: false,
+        );
+        
+        await _player.play();
+        debugPrint("Audio playback started successfully");
+      } catch (e) {
+        debugPrint("Error starting audio playback: $e");
+        _isLoading = false;
+        notifyListeners();
+      }
     }
   }
 
   Future<void> _autoPlay() async {
+    debugPrint("AutoPlay initiated");
     // Небольшая задержка перед автозапуском
     await Future.delayed(const Duration(milliseconds: 500));
     
@@ -60,7 +72,9 @@ class AudioProvider with ChangeNotifier {
         preload: false,
       );
       await _player.play();
+      debugPrint("AutoPlay successful");
     } catch (e) {
+      debugPrint("AutoPlay error: $e");
       _isLoading = false;
       notifyListeners();
     }

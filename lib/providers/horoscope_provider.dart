@@ -17,8 +17,10 @@ class HoroscopeProvider with ChangeNotifier {
   final HoroscopeService _horoscopeService = HoroscopeService();
 
   Future<void> fetchHoroscope(String zodiacId) async {
+    debugPrint("HoroscopeProvider: fetchHoroscope called for zodiacId: $zodiacId");
     // If the same zodiac sign is tapped again, reset
     if (_selectedZodiac == zodiacId) {
+      debugPrint("HoroscopeProvider: Same zodiac sign tapped, resetting");
       _selectedZodiac = "";
       _horoscopeText = "Нажмите на ваш знак зодиака для прогноза";
       _isLoading = false;
@@ -33,6 +35,7 @@ class HoroscopeProvider with ChangeNotifier {
         final now = DateTime.now();
         final difference = now.difference(cacheTime);
         if (difference.inHours < 1) {
+          debugPrint("HoroscopeProvider: Using cached data for $zodiacId");
           // Use cached data
           _selectedZodiac = zodiacId;
           _horoscopeText = _horoscopeCache[zodiacId]!;
@@ -43,6 +46,7 @@ class HoroscopeProvider with ChangeNotifier {
       }
     }
 
+    debugPrint("HoroscopeProvider: Fetching new data for $zodiacId");
     _isLoading = true;
     _selectedZodiac = zodiacId;
     _horoscopeText = "Загрузка прогноза...";
@@ -50,6 +54,7 @@ class HoroscopeProvider with ChangeNotifier {
 
     try {
       final text = await _horoscopeService.fetchHoroscope(zodiacId);
+      debugPrint("HoroscopeProvider: Received horoscope text with length: ${text.length}");
       _horoscopeText = text;
 
       // Cache the result
@@ -57,7 +62,7 @@ class HoroscopeProvider with ChangeNotifier {
       _cacheTimestamps[zodiacId] = DateTime.now();
     } catch (e) {
       _horoscopeText = "Не удалось загрузить гороскоп.";
-      debugPrint("Horoscope fetch error: $e");
+      debugPrint("HoroscopeProvider: Horoscope fetch error: $e");
     } finally {
       _isLoading = false;
       notifyListeners();
