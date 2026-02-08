@@ -86,7 +86,24 @@ class _WeatherWidgetState extends State<WeatherWidget> with TickerProviderStateM
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+
+                  // Город и описание
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      "${weatherData.city} • ${weatherData.description}".toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: widget.secondaryTextColor,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
 
                   // Иконка погоды
                   Icon(
@@ -107,19 +124,94 @@ class _WeatherWidgetState extends State<WeatherWidget> with TickerProviderStateM
                     ),
                   ),
 
-                  // Город и описание
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "${weatherData.city} • ${weatherData.description}".toUpperCase(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: widget.secondaryTextColor,
-                        letterSpacing: 1.2,
-                      ),
+                  // Ощущается как
+                  Text(
+                    "Ощущается как ${weatherData.feelsLike}°",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: widget.secondaryTextColor,
                     ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Дополнительная информация
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.water_drop,
+                            color: Colors.blue[300],
+                            size: widget.screenWidth * 0.08,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${weatherData.humidity}%",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: widget.secondaryTextColor,
+                            ),
+                          ),
+                          Text(
+                            "Влажность",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: widget.secondaryTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.air,
+                            color: Colors.green[300],
+                            size: widget.screenWidth * 0.08,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${weatherData.windSpeed.toStringAsFixed(1)} м/с",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: widget.secondaryTextColor,
+                            ),
+                          ),
+                          Text(
+                            "Ветер",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: widget.secondaryTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.compress,
+                            color: Colors.purple[300],
+                            size: widget.screenWidth * 0.08,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${weatherData.pressure} мм",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: widget.secondaryTextColor,
+                            ),
+                          ),
+                          Text(
+                            "Давление",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: widget.secondaryTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
